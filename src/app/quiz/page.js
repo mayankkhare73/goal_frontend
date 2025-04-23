@@ -204,47 +204,51 @@ export default function Quiz() {
                     </div>
 
                     <div className="mb-8">
-                        <div className="flex items-start mb-6">
-                            <span className="text-3xl font-bold text-cyan-400 mr-4 mt-1">
-                                {currentQuestionIndex + 1}.
-                            </span>
-                            <h3 className="text-2xl font-semibold text-gray-300">
-                                {currentQuestion.question || currentQuestion.text}
-                            </h3>
-                        </div>
-                        {currentQuestion.allowsMultiple && (
-                            <p className="text-sm text-cyan-400 mb-6 ml-12">
-                                Select up to {currentQuestion.maxSelections} options
-                            </p>
+                        {currentQuestion && (
+                            <>
+                                <div className="flex items-start mb-6">
+                                    <span className="text-4xl font-bold text-cyan-400 mr-4 mt-1 min-w-[40px] text-center">
+                                        {currentQuestionIndex + 1}.
+                                    </span>
+                                    <h3 className="text-2xl font-semibold text-gray-300 flex-1">
+                                        {currentQuestion.question || currentQuestion.text}
+                                    </h3>
+                                </div>
+                                {currentQuestion.allowsMultiple && (
+                                    <p className="text-sm text-cyan-400 mb-6 ml-14">
+                                        Select up to {currentQuestion.maxSelections} options
+                                    </p>
+                                )}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-14">
+                                    {currentQuestion.options && currentQuestion.options.map((option, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleAnswer(option.text)}
+                                            className={`
+                                                bg-gray-700/50 hover:bg-gray-700/70 border text-gray-300 px-6 py-4 rounded-lg text-left transition-all duration-300
+                                                ${currentAnswers.includes(option.text) 
+                                                    ? 'border-cyan-500 bg-cyan-500/20 shadow-lg shadow-cyan-500/10' 
+                                                    : 'border-cyan-500/20 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10'
+                                                }
+                                            `}
+                                        >
+                                            <div className="flex items-center">
+                                                <div className={`
+                                                    w-6 h-6 rounded-full flex items-center justify-center mr-3
+                                                    ${currentAnswers.includes(option.text) 
+                                                        ? 'bg-cyan-500 text-white' 
+                                                        : 'bg-gray-600 border border-cyan-500/20'
+                                                    }
+                                                `}>
+                                                    {currentAnswers.includes(option.text) ? '✓' : ''}
+                                                </div>
+                                                <span className="text-base md:text-lg">{option.text}</span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
                         )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-12">
-                            {currentQuestion.options && currentQuestion.options.map((option, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleAnswer(option.text)}
-                                    className={`
-                                        bg-gray-700/50 hover:bg-gray-700/70 border text-gray-300 px-6 py-4 rounded-lg text-left transition-all duration-300
-                                        ${currentAnswers.includes(option.text) 
-                                            ? 'border-cyan-500 bg-cyan-500/20 shadow-lg shadow-cyan-500/10' 
-                                            : 'border-cyan-500/20 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10'
-                                        }
-                                    `}
-                                >
-                                    <div className="flex items-center">
-                                        <div className={`
-                                            w-6 h-6 rounded-full flex items-center justify-center mr-3
-                                            ${currentAnswers.includes(option.text) 
-                                                ? 'bg-cyan-500 text-white' 
-                                                : 'bg-gray-600 border border-cyan-500/20'
-                                            }
-                                        `}>
-                                            {currentAnswers.includes(option.text) ? '✓' : ''}
-                                        </div>
-                                        <span>{option.text}</span>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
                     </div>
 
                     {error && (

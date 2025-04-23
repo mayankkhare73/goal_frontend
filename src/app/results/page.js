@@ -10,6 +10,7 @@ export default function Results() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCareer, setSelectedCareer] = useState(null);
 
   useEffect(() => {
     const fetchAssessmentDetails = async () => {
@@ -470,13 +471,13 @@ export default function Results() {
   const suitableRecommendations = getSuitableRecommendations(recommendations);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-3 sm:mb-4">
             Your Career Recommendations
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-lg sm:text-xl text-gray-300">
             {suitableRecommendations.length > 1 
               ? `Based on your responses, here are your top ${suitableRecommendations.length} career paths`
               : 'Based on your responses, here is your ideal career path'}
@@ -484,24 +485,24 @@ export default function Results() {
         </div>
 
         {suitableRecommendations.length === 0 ? (
-          <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 text-center border border-cyan-500/20">
-            <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-4">
+          <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-6 sm:p-8 text-center border border-cyan-500/20">
+            <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-3 sm:mb-4">
               No Suitable Recommendations Found
             </h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">
               We couldn't find any career paths that strongly match your profile. 
               Consider retaking the quiz with different responses or try our text-based recommendations.
             </p>
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link 
                 href="/quiz" 
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20"
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20 text-sm sm:text-base"
               >
                 Retake Quiz
               </Link>
               <Link 
                 href="/text-recommendations" 
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20 text-sm sm:text-base"
               >
                 Try Text Recommendations
               </Link>
@@ -510,53 +511,38 @@ export default function Results() {
         ) : (
           <div className="space-y-8">
             {suitableRecommendations.map((career, index) => (
-              <div 
-                key={index}
-                className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-cyan-500/20 border border-cyan-500/20"
-              >
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-2">
-                        {career.title}
-                      </h2>
-                      <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-medium ${
-                        career.sector === 'Government' 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/20' 
-                          : 'bg-blue-500/20 text-blue-400 border border-blue-500/20'
-                      }`}>
+              <div key={index} className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-6 sm:p-8 border border-cyan-500/20">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                      {career.title}
+                    </h2>
+                    <div className="mt-2">
+                      <span className="inline-block bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full text-xs sm:text-sm">
+                        Match Score: {(career.match_score * 100).toFixed(0)}%
+                      </span>
+                      <span className="inline-block bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs sm:text-sm ml-2">
                         {career.sector} Sector
                       </span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                        {Math.round(career.match_score * 100)}%
-                      </div>
-                      <div className="text-sm text-gray-400">Match Score</div>
-                    </div>
                   </div>
-
-                  {renderDetailedAnalysis(career)}
+                  <button
+                    onClick={() => setSelectedCareer(career)}
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20 text-sm sm:text-base"
+                  >
+                    View Details
+                  </button>
                 </div>
+
+                {selectedCareer === career && (
+                  <div className="mt-6 space-y-6">
+                    {renderDetailedAnalysis(career)}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
-
-        <div className="mt-12 flex justify-center space-x-6">
-          <Link 
-            href="/quiz" 
-            className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20"
-          >
-            Retake Quiz
-          </Link>
-          <Link 
-            href="/dashboard" 
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
       </div>
     </div>
   );
