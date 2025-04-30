@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,33 +18,23 @@ export default function Login() {
     setError(null);
 
     try {
-      console.log('Attempting login...');
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      console.log('Attempting login with NextAuth...');
+      
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
       });
 
-      const data = await response.json();
-      console.log('Login response:', data);
+      console.log('Login response:', result);
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (result.error) {
+        throw new Error(result.error || 'Login failed');
       }
 
-      // Store the token
-      console.log('Storing token:', data.token);
-      localStorage.setItem('token', data.token);
-      
-      // Verify token is stored
-      const storedToken = localStorage.getItem('token');
-      console.log('Stored token verification:', storedToken);
-      
-      // Force a hard redirect to ensure the page reloads
-      console.log('Attempting to redirect to /quiz');
-      window.location.href = '/quiz';
+      // Successful login, redirect to quiz page
+      console.log('Login successful, redirecting to /quiz');
+      router.push('/quiz');
     } catch (error) {
       console.error('Login error:', error);
       setError(error.message);

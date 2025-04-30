@@ -11,7 +11,7 @@ export default function CareerPage() {
 
   const fetchCareerDetails = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/careers/${params.id}`);
+      const response = await fetch(`/api/careers/${params.id}`);
       const data = await response.json();
       setCareer(data);
       setLoading(false);
@@ -22,7 +22,7 @@ export default function CareerPage() {
 
   const fetchJobMarketData = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/careers/${params.id}/job-market`);
+      const response = await fetch(`/api/careers/${params.id}/job-market`);
       const data = await response.json();
       setJobMarket(data);
     } catch (error) {

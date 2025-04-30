@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function TextRecommendations() {
     const router = useRouter();
+    const { data: session, status } = useSession();
     const [textInput, setTextInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -16,17 +18,17 @@ export default function TextRecommendations() {
         setError(null);
 
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
+            // Check if user is authenticated
+            if (status === 'unauthenticated') {
                 router.push('/login');
                 return;
             }
 
-            const response = await fetch('http://localhost:5000/api/assessment/text-recommendations', {
+            // Use the new API endpoint
+            const response = await fetch('/api/assessment/text-recommendations', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ textInput }),
             });
@@ -44,6 +46,24 @@ export default function TextRecommendations() {
             setLoading(false);
         }
     };
+
+    // Redirect if not authenticated
+    if (status === 'unauthenticated') {
+        router.push('/login');
+        return null;
+    }
+
+    // Show loading while checking authentication
+    if (status === 'loading') {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500 mx-auto"></div>
+                    <p className="mt-4 text-cyan-400 text-lg">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">

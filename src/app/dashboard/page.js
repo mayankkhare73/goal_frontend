@@ -3,45 +3,59 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Dashboard() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          router.push('/login');
-          return;
-        }
-
-        const response = await fetch('http://localhost:5000/api/assessment/history', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch assessment history');
-        }
-
-        const data = await response.json();
-        setHistory(data.history);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  const fetchHistory = async () => {
+    try {
+      // Check if user is authenticated
+      if (status === 'unauthenticated') {
+        router.push('/login');
+        return;
       }
-    };
 
+      if (status === 'loading') {
+        return; // Wait for session to load
+      }
+
+      setLoading(true);
+      setError(null);
+      
+      // Log for debugging
+      console.log('Fetching assessment history...');
+      
+      // Try the original endpoint first
+      const response = await fetch('/api/assessment/history');
+
+      // Log response status for debugging
+      console.log('History API response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch assessment history: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('History data received:', data.history ? `${data.history.length} items` : 'no data');
+      setHistory(data.history || []);
+    } catch (error) {
+      console.error('Dashboard error:', error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchHistory();
-  }, [router]);
+  }, [router, status]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -70,7 +84,8 @@ export default function Dashboard() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (loading) {
+  // Show loading while checking authentication
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
@@ -81,18 +96,33 @@ export default function Dashboard() {
     );
   }
 
+  // Redirect if not authenticated
+  if (status === 'unauthenticated') {
+    router.push('/login');
+    return null;
+  }
+
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-2xl mb-4">⚠️</div>
-          <p className="text-gray-600">{error}</p>
-          <button 
-            onClick={() => setError(null)}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Try Again
-          </button>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
+        <div className="text-center bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-red-500/20 max-w-md">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-bold text-white mb-4">Error Loading Dashboard</h2>
+          <p className="text-gray-300 mb-6">{error}</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <button 
+              onClick={fetchHistory}
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => router.push('/')}
+              className="bg-gray-700/50 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700/70 transition-all duration-300 font-medium"
+            >
+              Return Home
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -101,9 +131,20 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-8 sm:mb-12">
-          Your Dashboard
-        </h1>
+        <div className="flex justify-between items-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+            Your Dashboard
+          </h1>
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="bg-gray-800/50 backdrop-blur-lg text-gray-300 hover:text-white px-4 py-2 rounded-lg border border-red-500/20 hover:border-red-500/40 transition-all duration-300 text-sm flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Logout
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-cyan-500/20 hover:border-cyan-500/40 transition-all duration-300 group">

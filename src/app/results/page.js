@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function Results() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,19 +17,20 @@ export default function Results() {
   useEffect(() => {
     const fetchAssessmentDetails = async () => {
       try {
+        // Check if user is authenticated
+        if (status === 'unauthenticated') {
+          router.push('/login');
+          return;
+        }
+
+        if (status === 'loading') {
+          return; // Wait for session to load
+        }
+
         const assessmentId = searchParams.get('assessmentId');
         if (assessmentId) {
-          const token = localStorage.getItem('token');
-          if (!token) {
-            router.push('/login');
-            return;
-          }
-
-          const response = await fetch(`http://localhost:5000/api/assessment/${assessmentId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+          // Use the new API endpoint
+          const response = await fetch(`/api/assessment/${assessmentId}`);
 
           if (!response.ok) {
             throw new Error('Failed to fetch assessment details');
@@ -69,7 +72,7 @@ export default function Results() {
     };
 
     fetchAssessmentDetails();
-  }, [router, searchParams]);
+  }, [router, searchParams, status]);
 
   const getSuitableRecommendations = (recommendations) => {
     if (!Array.isArray(recommendations)) {

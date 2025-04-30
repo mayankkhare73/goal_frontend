@@ -1,4 +1,5 @@
 import './globals.css'
+import { SessionProviderWrapper } from './providers'
 
 export const metadata = {
   title: 'Career Discovery Platform',
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+      </body>
     </html>
   )
 }

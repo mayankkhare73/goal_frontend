@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+import { signIn } from 'next-auth/react';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -25,7 +24,8 @@ export default function SignUp() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/signup`, {
+      // Using the new API endpoint
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,20 @@ export default function SignUp() {
         throw new Error(data.error || 'Signup failed');
       }
 
-      router.push('/login?message=Check your email to confirm your account');
+      // Auto login after successful signup
+      const loginResult = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (loginResult.error) {
+        // If auto-login fails, redirect to login page
+        router.push('/login?message=Account created. Please sign in.');
+      } else {
+        // If auto-login succeeds, redirect to quiz
+        router.push('/quiz');
+      }
     } catch (error) {
       setError(error.message);
     } finally {

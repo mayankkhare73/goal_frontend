@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function Quiz() {
     const router = useRouter();
+    const { data: session, status } = useSession();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [responses, setResponses] = useState([]);
@@ -17,17 +19,18 @@ export default function Quiz() {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
+                // Check if user is authenticated
+                if (status === 'unauthenticated') {
                     router.push('/login');
                     return;
                 }
 
-                const response = await fetch('http://localhost:5000/api/quiz/questions', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
+                if (status === 'loading') {
+                    return; // Wait for session to load
+                }
+
+                // Use the new API endpoint
+                const response = await fetch('/api/quiz/questions');
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch questions');
@@ -45,7 +48,7 @@ export default function Quiz() {
         };
 
         fetchQuestions();
-    }, [router]);
+    }, [router, status]);
 
     const handleAnswer = (option) => {
         const currentQuestion = questions[currentQuestionIndex];
@@ -83,8 +86,8 @@ export default function Quiz() {
     const handleSubmit = async () => {
         setSubmitting(true);
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
+            // Check if user is authenticated
+            if (status === 'unauthenticated') {
                 router.push('/login');
                 return;
             }
@@ -94,11 +97,11 @@ export default function Quiz() {
                 answer: currentAnswers 
             }];
 
-            const response = await fetch('http://localhost:5000/api/quiz/submit', {
+            // Use the new API endpoint
+            const response = await fetch('/api/quiz/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ responses: finalResponses }),
             });
@@ -128,7 +131,8 @@ export default function Quiz() {
         return true;
     };
 
-    if (loading) {
+    // Show loading while checking authentication
+    if (status === 'loading' || loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
                 <div className="text-center">
@@ -137,6 +141,12 @@ export default function Quiz() {
                 </div>
             </div>
         );
+    }
+
+    // Redirect if not authenticated
+    if (status === 'unauthenticated') {
+        router.push('/login');
+        return null;
     }
 
     if (error) {
