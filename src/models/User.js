@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// If User model already exists, use it
-const User = mongoose.models.User || mongoose.model('User', new mongoose.Schema({
+// Define schema first
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -22,28 +22,27 @@ const User = mongoose.models.User || mongoose.model('User', new mongoose.Schema(
     type: Date,
     default: Date.now
   }
-}, {
-  methods: {
-    // Method to compare password
-    comparePassword: async function(candidatePassword) {
-      return bcrypt.compare(candidatePassword, this.password);
-    }
-  }
-}));
+});
 
-// Hash password before saving
-if (!mongoose.models.User) {
-  User.schema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next();
-    
-    try {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-      next();
-    } catch (error) {
-      next(error);
-    }
-  });
-}
+// Add method to compare password
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+// Add pre-save middleware to hash password
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Create the model
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User; 

@@ -18,7 +18,7 @@ export default function Login() {
     setError(null);
 
     try {
-      console.log('Attempting login with NextAuth...');
+      console.log('Attempting login with NextAuth...', { email });
       
       const result = await signIn('credentials', {
         redirect: false,
@@ -28,16 +28,20 @@ export default function Login() {
 
       console.log('Login response:', result);
 
+      if (!result) {
+        throw new Error('No response from authentication provider');
+      }
+
       if (result.error) {
         throw new Error(result.error || 'Login failed');
       }
 
       // Successful login, redirect to quiz page
-      console.log('Login successful, redirecting to /quiz');
-      router.push('/quiz');
+      console.log('Login successful, redirecting to dashboard');
+      router.push('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
-      setError(error.message);
+      setError(error.message || 'An error occurred during login. Please try again.');
     } finally {
       setLoading(false);
     }
