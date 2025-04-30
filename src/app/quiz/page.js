@@ -348,7 +348,7 @@ export default function Quiz() {
                                 <span className="w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
                                     2
                                 </span>
-                                <span className="text-gray-300">Don't overthink - go with your first instinct</span>
+                                <span className="text-gray-300">Don&apos;t overthink - go with your first instinct</span>
                             </li>
                             <li className="flex items-start">
                                 <span className="w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">

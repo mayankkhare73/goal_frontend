@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
@@ -13,8 +13,9 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const dataFetchedRef = useRef(false);
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     try {
       // Check if user is authenticated
       if (status === 'unauthenticated') {
@@ -51,11 +52,24 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router, status]);
 
   useEffect(() => {
-    fetchHistory();
-  }, [router, status]);
+    if (!dataFetchedRef.current && status !== 'loading') {
+      fetchHistory();
+      dataFetchedRef.current = true;
+    }
+  }, [fetchHistory, status]);
+
+  useEffect(() => {
+    if (status === 'loading') {
+      dataFetchedRef.current = false;
+    }
+    
+    return () => {
+      dataFetchedRef.current = false;
+    };
+  }, [status]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {

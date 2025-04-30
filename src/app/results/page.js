@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-export default function Results() {
+function ResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
@@ -493,7 +493,7 @@ export default function Results() {
               No Suitable Recommendations Found
             </h2>
             <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">
-              We couldn't find any career paths that strongly match your profile. 
+              We couldn&apos;t find any career paths that strongly match your profile. 
               Consider retaking the quiz with different responses or try our text-based recommendations.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -548,5 +548,25 @@ export default function Results() {
         )}
       </div>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function ResultsLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-500 border-t-transparent mx-auto"></div>
+        <p className="mt-4 text-gray-300 text-lg font-medium">Loading results...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Results() {
+  return (
+    <Suspense fallback={<ResultsLoading />}>
+      <ResultsContent />
+    </Suspense>
   );
 } 
