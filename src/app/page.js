@@ -19,8 +19,11 @@ export default function Home() {
   }, [router, status]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-xl">Loading...</div>
+    <div className="min-h-screen gradient-hero flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-emerald-500 mx-auto"></div>
+        <p className="mt-4 text-emerald-400 text-lg">Loading your experience...</p>
+      </div>
     </div>
   );
 }

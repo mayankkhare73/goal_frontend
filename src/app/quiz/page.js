@@ -38,6 +38,11 @@ export default function Quiz() {
 
                 const data = await response.json();
                 console.log('API Response:', data);
+                // Debug log to see question structure
+                if (data && data.length > 0) {
+                    console.log('First question structure:', JSON.stringify(data[0], null, 2));
+                    console.log('First question options:', JSON.stringify(data[0].options, null, 2));
+                }
                 setQuestions(data);
             } catch (error) {
                 console.error('Error fetching questions:', error);
@@ -52,15 +57,16 @@ export default function Quiz() {
 
     const handleAnswer = (option) => {
         const currentQuestion = questions[currentQuestionIndex];
+        const optionValue = typeof option === 'object' ? option._id : option;
         
         if (currentQuestion.allowsMultiple) {
-            if (currentAnswers.includes(option)) {
-                setCurrentAnswers(currentAnswers.filter(a => a !== option));
+            if (currentAnswers.includes(optionValue)) {
+                setCurrentAnswers(currentAnswers.filter(a => a !== optionValue));
             } else if (currentAnswers.length < currentQuestion.maxSelections) {
-                setCurrentAnswers([...currentAnswers, option]);
+                setCurrentAnswers([...currentAnswers, optionValue]);
             }
         } else {
-            setCurrentAnswers([option]);
+            setCurrentAnswers([optionValue]);
         }
     };
 
@@ -126,8 +132,12 @@ export default function Quiz() {
             // Store recommendations in localStorage
             localStorage.setItem('recommendations', JSON.stringify(data.recommendations));
             
-            // Navigate to results page
-            router.push('/results');
+            // Navigate to results page with assessment ID if available
+            if (data.assessmentId) {
+                router.push(`/results?assessmentId=${data.assessmentId}`);
+            } else {
+                router.push('/results');
+            }
         } catch (error) {
             console.error('Error submitting quiz:', error);
             setError(error.message || 'An unexpected error occurred');
@@ -141,7 +151,7 @@ export default function Quiz() {
         if (currentAnswers.length === 0) return false;
         
         const currentQuestion = questions[currentQuestionIndex];
-        if (currentQuestion.allowsMultiple) {
+        if (currentQuestion?.allowsMultiple) {
             return currentAnswers.length <= currentQuestion.maxSelections;
         }
         return true;
@@ -150,10 +160,10 @@ export default function Quiz() {
     // Show loading while checking authentication
     if (status === 'loading' || loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
+            <div className="min-h-screen gradient-hero flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500 mx-auto"></div>
-                    <p className="mt-4 text-cyan-400 text-lg">Loading your career assessment...</p>
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#00ffff] mx-auto"></div>
+                    <p className="mt-4 text-[#00ffff] text-lg">Loading your career assessment...</p>
                 </div>
             </div>
         );
@@ -167,22 +177,22 @@ export default function Quiz() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
-                <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-red-500/20 max-w-md mx-4">
-                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400 mb-4">
+            <div className="min-h-screen gradient-hero flex items-center justify-center">
+                <div className="bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-[#9370db]/20 max-w-md mx-4">
+                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
                         Error Loading Quiz
                     </h2>
                     <p className="text-gray-300 mb-6">{error}</p>
                     <div className="flex justify-center space-x-4">
                         <button
                             onClick={() => window.location.reload()}
-                            className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20"
+                            className="gradient-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg hover:shadow-[#9370db]/20"
                         >
                             Try Again
                         </button>
                         <Link
                             href="/dashboard"
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20"
+                            className="gradient-accent text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg hover:shadow-[#00ffff]/20"
                         >
                             Back to Dashboard
                         </Link>
@@ -192,188 +202,134 @@ export default function Quiz() {
         );
     }
 
-    const currentQuestion = questions[currentQuestionIndex];
+    // Get current question, with safety check
+    const currentQuestion = questions[currentQuestionIndex] || {};
     console.log('Current Question:', currentQuestion);
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    
+    // Parse question text safely
+    const questionText = typeof currentQuestion?.text === 'object' 
+        ? (currentQuestion?.text?.text || JSON.stringify(currentQuestion?.text))
+        : currentQuestion?.text || 'Loading question...';
+    
+    // Calculate progress
+    const progress = ((currentQuestionIndex + 1) / Math.max(questions.length, 1)) * 100;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen gradient-hero py-6 px-4">
             <div className="max-w-4xl mx-auto">
-                <div className="flex justify-between items-center mb-12">
-                    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                        Interactive Career Assessment
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                    <div>
+                        <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff]">
+                            Career Assessment Quiz
                     </h1>
-                    <Link
-                        href="/dashboard"
-                        className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20"
-                    >
-                        Back to Dashboard
-                    </Link>
+                        <p className="text-gray-300 mt-1">
+                            Discover your ideal career path through our interactive quiz
+                        </p>
+                    </div>
+                    <div className="flex gap-3">
+                        <Link
+                            href="/results"
+                            className="bg-[#3a3a80]/70 backdrop-blur-lg text-gray-300 hover:text-[#00ffff] px-4 py-2 rounded-lg border border-[#9370db]/20 hover:border-[#9370db]/40 transition-all duration-300 text-sm flex items-center gap-2 cursor-pointer"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            Assessment History
+                        </Link>
+                    </div>
                 </div>
 
-                <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-cyan-500/20">
-                    <div className="mb-8">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                                Question {currentQuestionIndex + 1} of {questions.length}
-                            </h2>
-                            <span className="text-cyan-400 font-medium">
-                                {Math.round(progress)}% Complete
-                            </span>
-                        </div>
-                        <div className="w-full bg-gray-700/50 rounded-full h-2.5 mb-4">
-                            <div
-                                className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full transition-all duration-300"
+                <div className="w-full bg-[#3a3a80]/60 rounded-full h-2.5 mb-6">
+                    <div 
+                        className="bg-gradient-to-r from-[#9370db] to-[#00ffff] h-2.5 rounded-full transition-all duration-500 ease-in-out" 
                                 style={{ width: `${progress}%` }}
-                            ></div>
-                        </div>
+                    />
                     </div>
 
-                    <div className="mb-8">
-                        {currentQuestion && (
-                            <>
-                                <div className="flex items-start mb-6">
-                                    <span className="text-4xl font-bold text-cyan-400 mr-4 mt-1 min-w-[40px] text-center">
-                                        {currentQuestionIndex + 1}.
-                                    </span>
-                                    <h3 className="text-2xl font-semibold text-gray-300 flex-1">
-                                        {currentQuestion.question || currentQuestion.text}
-                                    </h3>
-                                </div>
-                                {currentQuestion.allowsMultiple && (
-                                    <p className="text-sm text-cyan-400 mb-6 ml-14">
-                                        Select up to {currentQuestion.maxSelections} options
+                <div className="bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-[#4b0082]/20 mb-8">
+                    <h2 className="text-xl font-bold text-white mb-6">
+                        {currentQuestionIndex + 1}. {questionText}
+                    </h2>
+
+                    {currentQuestion?.allowsMultiple && (
+                        <p className="mb-4 text-sm text-[#9370db]">
+                            Select up to {currentQuestion.maxSelections} options that apply to you
                                     </p>
                                 )}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-14">
-                                    {currentQuestion.options && currentQuestion.options.map((option, index) => (
+
+                    <div className="space-y-3 mb-8">
+                        {Array.isArray(currentQuestion?.options) && currentQuestion?.options.map((option, index) => {
+                            // Skip if option is null or undefined
+                            if (option === null || option === undefined) return null;
+                            
+                            // Make sure option is a string
+                            const optionText = typeof option === 'object' ? 
+                                (option.text || JSON.stringify(option)) : 
+                                String(option);
+                            
+                            // Get the option's value for comparison
+                            const optionValue = typeof option === 'object' ? option._id : option;
+                            const isSelected = currentAnswers.includes(optionValue);
+                                
+                            return (
                                         <button
                                             key={index}
-                                            onClick={() => handleAnswer(option.text)}
-                                            className={`
-                                                bg-gray-700/50 hover:bg-gray-700/70 border text-gray-300 px-6 py-4 rounded-lg text-left transition-all duration-300
-                                                ${currentAnswers.includes(option.text) 
-                                                    ? 'border-cyan-500 bg-cyan-500/20 shadow-lg shadow-cyan-500/10' 
-                                                    : 'border-cyan-500/20 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10'
-                                                }
-                                            `}
-                                        >
-                                            <div className="flex items-center">
-                                                <div className={`
-                                                    w-6 h-6 rounded-full flex items-center justify-center mr-3
-                                                    ${currentAnswers.includes(option.text) 
-                                                        ? 'bg-cyan-500 text-white' 
-                                                        : 'bg-gray-600 border border-cyan-500/20'
-                                                    }
-                                                `}>
-                                                    {currentAnswers.includes(option.text) ? '✓' : ''}
-                                                </div>
-                                                <span className="text-base md:text-lg">{option.text}</span>
-                                            </div>
+                                    onClick={() => handleAnswer(option)}
+                                    className={`w-full text-left p-4 rounded-lg transition-all duration-200 border cursor-pointer ${
+                                        isSelected
+                                            ? 'bg-[#4b0082]/60 border-[#9370db] text-[#00ffff]'
+                                            : 'bg-[#2a2a60]/70 border-[#3a3a80]/60 text-gray-300 hover:bg-[#4b0082]/40 hover:border-[#9370db]/50'
+                                    }`}
+                                >
+                                    {optionText}
                                         </button>
-                                    ))}
-                                </div>
-                            </>
-                        )}
+                            );
+                        })}
                     </div>
 
-                    {error && (
-                        <div className="bg-red-500/20 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6">
-                            {error}
-                        </div>
-                    )}
-
-                    <div className="flex justify-between items-center">
-                        <div className="flex space-x-4">
+                    <div className="flex justify-between">
                             <button
                                 onClick={handlePrevious}
                                 disabled={currentQuestionIndex === 0}
-                                className="bg-gray-700/50 hover:bg-gray-700/70 border border-cyan-500/20 text-gray-300 px-6 py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Previous
-                            </button>
-                            <Link
-                                href="/text-recommendations"
-                                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20"
-                            >
-                                Try Text-Based Instead
-                            </Link>
-                        </div>
-                        <button
-                            onClick={currentQuestionIndex === questions.length - 1 ? handleSubmit : handleNext}
-                            disabled={!canProceed() || submitting}
-                            className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className={`px-6 py-2 rounded-lg transition-all shadow-lg ${
+                                currentQuestionIndex === 0
+                                    ? 'bg-gray-700/50 text-gray-500 cursor-not-allowed'
+                                    : 'bg-[#2a2a60] text-[#00ffff] hover:bg-[#3a3a80] cursor-pointer'
+                            }`}
                         >
-                            {submitting ? (
-                                <div className="flex items-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    {currentQuestionIndex === questions.length - 1 ? 'Submitting...' : 'Next'}
-                                </div>
-                            ) : (
-                                currentQuestionIndex === questions.length - 1 ? 'Submit Assessment' : 'Next'
-                            )}
+                            Previous
                         </button>
+                        
+                        {currentQuestionIndex < questions.length - 1 ? (
+                            <button
+                                onClick={handleNext}
+                                disabled={!canProceed()}
+                                className={`gradient-primary px-6 py-2 rounded-lg text-white transition-all shadow-lg ${
+                                    !canProceed()
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : 'hover:opacity-90 cursor-pointer'
+                                }`}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleSubmit}
+                                disabled={submitting || !canProceed()}
+                                className={`gradient-accent px-6 py-2 rounded-lg text-white transition-all shadow-lg ${
+                                    submitting || !canProceed()
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : 'hover:opacity-90 cursor-pointer'
+                                }`}
+                            >
+                                {submitting ? 'Submitting...' : 'Submit'}
+                            </button>
+                        )}
                     </div>
                 </div>
 
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-cyan-500/20">
-                        <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-4">
-                            About This Assessment
-                        </h3>
-                        <p className="text-gray-300 mb-4">
-                            Our interactive career assessment helps identify your strengths, interests, and preferences to match you with the most suitable career paths.
-                        </p>
-                        <ul className="space-y-4">
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    ✓
-                                </span>
-                                <span className="text-gray-300">Takes approximately 5-10 minutes</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    ✓
-                                </span>
-                                <span className="text-gray-300">Completely free and confidential</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    ✓
-                                </span>
-                                <span className="text-gray-300">Get instant personalized results</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-blue-500/20">
-                        <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
-                            Tips for Best Results
-                        </h3>
-                        <ul className="space-y-4">
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    1
-                                </span>
-                                <span className="text-gray-300">Answer honestly based on your true preferences</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    2
-                                </span>
-                                <span className="text-gray-300">Don&apos;t overthink - go with your first instinct</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-1">
-                                    3
-                                </span>
-                                <span className="text-gray-300">Consider your long-term career goals</span>
-                            </li>
-                        </ul>
-                    </div>
+                <div className="text-center text-gray-400">
+                    Question {currentQuestionIndex + 1} of {questions?.length || 0}
                 </div>
             </div>
         </div>

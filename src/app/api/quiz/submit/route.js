@@ -483,34 +483,34 @@ export async function POST(request) {
 
     // Create an assessment record with user ID and responses
     try {
-    const assessment = new AssessmentHistory({
-      user: userId,
-      responses: formattedResponses,
-        recommendations: normalizedRecommendations,
-      type: 'quiz'
-    });
-
+      await connectDB();
+      
+      // Save to assessment history
+      const assessment = new AssessmentHistory({
+        user: userId,
+        responses: formattedResponses,
+        recommendations: recommendationsData.recommendations,
+        type: 'quiz'
+      });
+  
       await assessment.save();
-      console.log('Assessment history saved successfully with ID:', assessment._id);
-    } catch (saveError) {
-      console.error('Error saving assessment:', saveError);
-      // We'll still return recommendations even if saving fails
-      console.log('Continuing despite save error to return recommendations to user');
+      console.log('Quiz assessment saved successfully with ID:', assessment._id);
+      
+      // Return assessment ID along with recommendations
+      return NextResponse.json({ 
+        recommendations: recommendationsData.recommendations,
+        assessmentId: assessment._id.toString(),
+        success: true 
+      });
+      
+    } catch (dbError) {
+      console.error('Error saving assessment to database:', dbError);
+      // Return the recommendations even if DB save fails, but without the assessment ID
+      return NextResponse.json({ 
+        recommendations: recommendationsData.recommendations,
+        success: true 
+      });
     }
-
-    // Check the recommendations structure before returning
-    normalizedRecommendations.forEach((rec, index) => {
-      if (!rec.title || typeof rec.match_score !== 'number') {
-        console.warn(`Warning: Recommendation ${index} has invalid data:`, 
-          {hasTitle: !!rec.title, matchScoreType: typeof rec.match_score});
-      }
-    });
-
-    // Successful response with recommendations
-    return NextResponse.json({
-      success: true,
-      recommendations: normalizedRecommendations
-    });
   } catch (error) {
     console.error('Error processing quiz submission:', error);
     return NextResponse.json({ error: error.message || 'An unexpected error occurred' }, { status: 500 });

@@ -153,16 +153,22 @@ export async function POST(request) {
   
       await assessment.save();
       console.log('Text-based assessment saved successfully with ID:', assessment._id);
+      
+      // Return assessment ID along with recommendations
+      return NextResponse.json({ 
+        recommendations: formattedRecommendations,
+        assessmentId: assessment._id.toString(),
+        success: true
+      });
     } catch (dbError) {
       // Still return the recommendations even if saving to DB fails
       console.error('Error saving assessment to database:', dbError);
-      // Continue with returning the recommendations
+      // Continue with returning the recommendations, but without the assessment ID
+      return NextResponse.json({ 
+        recommendations: formattedRecommendations,
+        success: true
+      });
     }
-
-    return NextResponse.json({ 
-      recommendations: formattedRecommendations,
-      success: true
-    });
   } catch (error) {
     console.error('Error in text-recommendations endpoint:', error);
     return NextResponse.json({ 

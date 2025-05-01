@@ -1,5 +1,6 @@
 import './globals.css'
 import { SessionProviderWrapper } from './providers'
+import SidebarLayout from '@/components/SidebarLayout'
 
 export const metadata = {
   title: 'Career Discovery Platform',
@@ -8,9 +9,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+    <html lang="en" className="dark">
+      <body className="antialiased">
+        <SessionProviderWrapper>
+          <SidebarLayout>{children}</SidebarLayout>
+        </SessionProviderWrapper>
       </body>
     </html>
   )

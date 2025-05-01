@@ -4,7 +4,7 @@ import User from '@/models/User';
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json();
+    const { name, email, password } = await request.json();
 
     if (!email || !password) {
       console.log('Missing signup fields:', { hasEmail: !!email, hasPassword: !!password });
@@ -25,7 +25,7 @@ export async function POST(request) {
 
     // Create new user
     console.log('Creating new user...');
-    const user = new User({ email, password });
+    const user = new User({ name, email, password });
     await user.save();
     console.log('User created successfully:', user._id.toString());
 
@@ -33,6 +33,7 @@ export async function POST(request) {
       message: 'Signup successful',
       user: {
         id: user._id.toString(),
+        name: user.name,
         email: user.email
       }
     }, { status: 201 });
