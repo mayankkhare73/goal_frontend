@@ -1,15 +1,79 @@
 'use client';
 
+// Force dynamic rendering to prevent Vercel build issues
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+// Simple client-only testimonial component
+function TestimonialsSection({ testimonials, activeTestimonial, setActiveTestimonial }) {
+  return (
+    <section className="py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
+            Career Transformation Stories
+          </h2>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Discover how our AI-powered career intelligence has helped professionals unlock their true potential
+          </p>
+        </div>
+        
+        <div className="bg-[#3a3a80]/30 backdrop-blur-sm border border-[#9370db]/20 rounded-xl p-6 md:p-8 shadow-xl">
+          <div className="flex flex-col md:flex-row gap-8 items-center">
+            <div className="md:w-1/3">
+              <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
+                <Image 
+                  src={testimonials[activeTestimonial].image} 
+                  alt={testimonials[activeTestimonial].name}
+                  className="rounded-full border-4 border-emerald-500/30 object-cover"
+                  fill
+                  sizes="(max-width: 768px) 96px, 128px"
+                />
+              </div>
+              <div className="text-center mt-4">
+                <h3 className="text-xl font-semibold text-white">{testimonials[activeTestimonial].name}</h3>
+                <p className="text-emerald-400">{testimonials[activeTestimonial].role}</p>
+              </div>
+              <div className="flex justify-center gap-2 mt-4">
+                {testimonials.map((_, index) => (
+                  <button 
+                    key={index}
+                    onClick={() => setActiveTestimonial(index)}
+                    className={`w-3 h-3 rounded-full ${activeTestimonial === index ? 'bg-emerald-500' : 'bg-gray-600'}`}
+                    aria-label={`View testimonial ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="md:w-2/3">
+              <svg className="h-12 w-12 text-emerald-500/30 mb-4" fill="currentColor" viewBox="0 0 32 32">
+                <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+              </svg>
+              <p className="text-lg text-gray-300 italic">
+                {testimonials[activeTestimonial].text}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   // If authenticated, redirect to dashboard
   if (status === 'authenticated') {
@@ -177,57 +241,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-              Career Transformation Stories
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Discover how our AI-powered career intelligence has helped professionals unlock their true potential
-            </p>
-          </div>
-          
-          <div className="bg-[#3a3a80]/30 backdrop-blur-sm border border-[#9370db]/20 rounded-xl p-6 md:p-8 shadow-xl">
-            <div className="flex flex-col md:flex-row gap-8 items-center">
-              <div className="md:w-1/3">
-                <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
-                  <Image 
-                    src={testimonials[activeTestimonial].image} 
-                    alt={testimonials[activeTestimonial].name}
-                    className="rounded-full border-4 border-emerald-500/30 object-cover"
-                    fill
-                    sizes="(max-width: 768px) 96px, 128px"
-                  />
-                </div>
-                <div className="text-center mt-4">
-                  <h3 className="text-xl font-semibold text-white">{testimonials[activeTestimonial].name}</h3>
-                  <p className="text-emerald-400">{testimonials[activeTestimonial].role}</p>
-                </div>
-                <div className="flex justify-center gap-2 mt-4">
-                  {testimonials.map((_, index) => (
-                    <button 
-                      key={index}
-                      onClick={() => setActiveTestimonial(index)}
-                      className={`w-3 h-3 rounded-full ${activeTestimonial === index ? 'bg-emerald-500' : 'bg-gray-600'}`}
-                      aria-label={`View testimonial ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="md:w-2/3">
-                <svg className="h-12 w-12 text-emerald-500/30 mb-4" fill="currentColor" viewBox="0 0 32 32">
-                  <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                </svg>
-                <p className="text-lg text-gray-300 italic">
-                  {testimonials[activeTestimonial].text}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Testimonials Section - only render on client */}
+      {isClient && (
+        <TestimonialsSection 
+          testimonials={testimonials} 
+          activeTestimonial={activeTestimonial} 
+          setActiveTestimonial={setActiveTestimonial} 
+        />
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-[#2a2a60] to-[#1a1a40]">
@@ -281,8 +302,8 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="/terms" target="_blank" className="hover:text-emerald-400 transition-colors">Terms of Service</a></li>
-                <li><a href="/privacy" target="_blank" className="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
+                <li><Link href="/terms" className="hover:text-emerald-400 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy Policy</Link></li>
                 <li><a href="#" className="hover:text-emerald-400 transition-colors">Cookies</a></li>
               </ul>
             </div>
