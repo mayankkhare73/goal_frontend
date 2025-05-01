@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -25,22 +26,22 @@ export default function Home() {
   
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Software Developer",
-      image: "https://randomuser.me/api/portraits/women/32.jpg",
-      text: "CareerPathfinder helped me transition from teaching to tech. The personalized recommendations matched my skills perfectly with software development roles."
+      name: 'Sarah Johnson',
+      role: 'UX Designer',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+      text: 'The career assessment was eye-opening. It matched me with UX design when I was stuck in a marketing role I disliked. The personalized roadmap helped me transition, and now I love what I do every day.'
     },
     {
-      name: "Michael Chen",
-      role: "Marketing Specialist",
-      image: "https://randomuser.me/api/portraits/men/46.jpg",
-      text: "After feeling stuck in my career, the AI assessment revealed marketing roles that aligned with my creativity and analytical skills. Now I'm thriving in a job I love!"
+      name: 'Michael Torres',
+      role: 'Data Scientist',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+      text: 'I was impressed by how accurately the assessment identified my strengths in data analysis. The AI behind this platform is remarkable, and the career path suggestions aligned perfectly with my goals.'
     },
     {
-      name: "Aisha Patel",
-      role: "Healthcare Administrator",
-      image: "https://randomuser.me/api/portraits/women/65.jpg",
-      text: "The career quiz identified healthcare administration as a perfect match for my organizational skills and desire to help people. I've never been happier professionally."
+      name: 'Priya Mehta',
+      role: 'Software Engineer',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
+      text: 'As someone looking to switch careers, this platform gave me the confidence and clarity I needed. The detailed skills analysis and learning resources were instrumental in my successful transition.'
     }
   ];
 
@@ -80,11 +81,15 @@ export default function Home() {
             </div>
             <div className="md:w-1/2 mt-12 md:mt-0 relative">
               <div className="bg-[#3a3a80]/50 backdrop-blur-sm border border-[#9370db]/20 rounded-2xl p-6 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                <img 
-                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" 
-                  alt="Career Assessment" 
-                  className="rounded-lg shadow-lg w-full"
-                />
+                <div className="relative w-full h-[300px]">
+                  <Image 
+                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" 
+                    alt="Career Assessment" 
+                    className="rounded-lg shadow-lg object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
                 <div className="mt-4 bg-[#2a2a60]/80 backdrop-blur-sm rounded-lg p-4 border border-[#9370db]/10">
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-emerald-400 font-semibold">Career Match Results</div>
@@ -187,11 +192,15 @@ export default function Home() {
           <div className="bg-[#3a3a80]/30 backdrop-blur-sm border border-[#9370db]/20 rounded-xl p-6 md:p-8 shadow-xl">
             <div className="flex flex-col md:flex-row gap-8 items-center">
               <div className="md:w-1/3">
-                <img 
-                  src={testimonials[activeTestimonial].image} 
-                  alt={testimonials[activeTestimonial].name}
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full mx-auto border-4 border-emerald-500/30"
-                />
+                <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
+                  <Image 
+                    src={testimonials[activeTestimonial].image} 
+                    alt={testimonials[activeTestimonial].name}
+                    className="rounded-full border-4 border-emerald-500/30 object-cover"
+                    fill
+                    sizes="(max-width: 768px) 96px, 128px"
+                  />
+                </div>
                 <div className="text-center mt-4">
                   <h3 className="text-xl font-semibold text-white">{testimonials[activeTestimonial].name}</h3>
                   <p className="text-emerald-400">{testimonials[activeTestimonial].role}</p>

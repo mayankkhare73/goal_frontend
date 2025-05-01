@@ -57,7 +57,7 @@ export default function TermsAndConditions() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">8. Changes to Terms</h2>
-            <p>We reserve the right to modify these terms at any time. We will provide notice of any material changes by updating the "Last Updated" date. Your continued use of the service after such modifications constitutes your acceptance of the revised terms.</p>
+            <p>We reserve the right to modify these terms at any time. We will provide notice of any material changes by updating the &quot;Last Updated&quot; date. Your continued use of the service after such modifications constitutes your acceptance of the revised terms.</p>
           </section>
           
           <section className="space-y-3">

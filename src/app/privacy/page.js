@@ -22,7 +22,7 @@ export default function PrivacyPolicy() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
-            <p>CareerPathfinder ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share your personal information when you use our career assessment and recommendation platform.</p>
+            <p>CareerPathfinder (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share your personal information when you use our career assessment and recommendation platform.</p>
           </section>
           
           <section className="space-y-3">
@@ -84,17 +84,17 @@ export default function PrivacyPolicy() {
               <li>Data portability</li>
               <li>Withdrawing consent</li>
             </ul>
-            <p className="mt-2">To exercise these rights, please contact us using the information in the "Contact Us" section.</p>
+            <p className="mt-2">To exercise these rights, please contact us using the information in the &quot;Contact Us&quot; section.</p>
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">7. Children's Privacy</h2>
+            <h2 className="text-xl font-semibold text-white">7. Children&apos;s Privacy</h2>
             <p>Our services are not intended for individuals under 16 years of age. We do not knowingly collect personal information from children under 16.</p>
           </section>
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">8. Changes to This Privacy Policy</h2>
-            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date.</p>
           </section>
           
           <section className="space-y-3">
