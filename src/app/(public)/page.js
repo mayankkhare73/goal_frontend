@@ -2,26 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export default function MarketingPage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  
-  // If authenticated, redirect to dashboard
-  if (status === 'authenticated') {
-    router.push('/dashboard');
-    return (
-      <div className="min-h-screen gradient-hero flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-emerald-500 mx-auto"></div>
-          <p className="mt-4 text-emerald-400 text-lg">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
   
   const testimonials = [
     {
@@ -52,10 +35,10 @@ export default function Home() {
           <div className="md:flex md:items-center md:space-x-12">
             <div className="md:w-1/2 z-10">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-6">
-                Discover Your Perfect Career DNA Match
+                Discover Your Perfect Career Path
               </h1>
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Our neural AI system maps your unique skills, interests, and values to future-proof career paths that truly align with your professional identity.
+                Our AI-powered assessment analyzes your unique skills, interests, and values to recommend careers that truly match who you are.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link 
@@ -125,10 +108,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-              How Our Career Intelligence System Works
+              How CareerPathfinder Works
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Our advanced AI talent recognition technology analyzes multiple factors to find your perfect career alignment
+              Our advanced AI algorithm analyzes multiple factors to find your perfect career match
             </p>
           </div>
           
@@ -139,9 +122,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Career Compass Assessment</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">Take The Career Quiz</h3>
               <p className="text-gray-300">
-                Complete our talent discovery survey to map your professional strengths, passion points, work environment preferences, and core values.
+                Answer questions about your skills, interests, work style, and values in our comprehensive yet quick assessment.
               </p>
             </div>
             
@@ -151,9 +134,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Neural Career Analysis</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">AI Analysis</h3>
               <p className="text-gray-300">
-                Our adaptive machine learning algorithm processes your unique professional fingerprint and maps it to our database of future-focused careers.
+                Our machine learning algorithm processes your responses to identify patterns and match them to successful career profiles.
               </p>
             </div>
             
@@ -163,9 +146,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Personalized Success Roadmap</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">Get Your Results</h3>
               <p className="text-gray-300">
-                Receive your custom career blueprint with tailored insights, skill development paths, and actionable steps to achieve your optimal professional future.
+                Receive personalized career recommendations with detailed insights on why they match your profile and how to pursue them.
               </p>
             </div>
           </div>
@@ -177,10 +160,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-              Career Transformation Stories
+              Success Stories
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Discover how our AI-powered career intelligence has helped professionals unlock their true potential
+              See how CareerPathfinder has helped people find their dream careers
             </p>
           </div>
           
@@ -224,18 +207,18 @@ export default function Home() {
       <section className="py-16 bg-gradient-to-r from-[#2a2a60] to-[#1a1a40]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Unlock Your Ideal Career Path?
+            Ready to Discover Your Ideal Career Path?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Join thousands who have discovered their professional DNA and found career clarity with our next-gen assessment technology
+            Join thousands who have found career clarity and purpose with our AI-powered assessment tool
           </p>
           <Link 
             href="/signup" 
             className="gradient-primary text-white px-8 py-4 rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-lg inline-block"
           >
-            Start Your Free Career Discovery
+            Start Your Free Assessment
           </Link>
-          <p className="mt-4 text-gray-400">No commitment required • Only takes 5-10 minutes to map your future</p>
+          <p className="mt-4 text-gray-400">No commitment required • Only takes 5-10 minutes</p>
         </div>
       </section>
 
@@ -285,4 +268,4 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+} 

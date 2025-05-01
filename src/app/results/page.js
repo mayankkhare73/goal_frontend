@@ -557,8 +557,8 @@ function ResultsContent() {
       <div className="min-h-screen gradient-hero flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#00ffff] mx-auto"></div>
-          <p className="mt-4 text-[#00ffff] text-lg font-medium">
-            {showingAssessmentDetails ? "Analyzing your results..." : "Loading your assessment history..."}
+          <p className="mt-4 text-[#00ffff] text-lg">
+            Preparing your career intelligence report...
           </p>
         </div>
       </div>
@@ -567,18 +567,26 @@ function ResultsContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen gradient-hero flex items-center justify-center">
-        <div className="text-center">
-          <div className="bg-[#3a3a80]/70 backdrop-blur-lg border border-[#9370db]/30 text-gray-200 px-6 py-4 rounded-xl mb-6 shadow-lg">
-            <div className="font-bold text-[#9370db]">Error</div>
-            <p>{error}</p>
+      <div className="min-h-screen gradient-hero py-8 px-4">
+        <div className="max-w-4xl mx-auto bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-[#9370db]/20">
+          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-6">
+            Career Insights Temporarily Unavailable
+          </h2>
+          <p className="text-gray-300 mb-8">{error}</p>
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={() => window.location.reload()}
+              className="gradient-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg"
+            >
+              Reconnect to Career Database
+            </button>
+            <Link
+              href="/dashboard"
+              className="bg-transparent border-2 border-[#9370db]/30 text-white px-6 py-3 rounded-lg hover:bg-[#9370db]/10 transition-all duration-300"
+            >
+              Return to Command Center
+            </Link>
           </div>
-          <Link 
-            href="/dashboard" 
-            className="gradient-primary text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg hover:shadow-[#9370db]/20 text-sm sm:text-base cursor-pointer"
-          >
-            Return to Dashboard
-          </Link>
         </div>
       </div>
     );
@@ -693,15 +701,18 @@ function ResultsContent() {
         {/* Always show Assessment History Section if not loading */}
         {!showingAssessmentDetails && (
           <div className="mb-12">
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff]">
+                Your Career Exploration Journey
+              </h2>
               <button
                 onClick={fetchHistory}
-                className="bg-[#3a3a80]/70 backdrop-blur-lg text-gray-300 hover:text-[#00ffff] px-3 py-1 rounded-lg border border-[#9370db]/20 hover:border-[#9370db]/40 transition-all duration-300 text-xs flex items-center gap-1 cursor-pointer"
+                className="bg-[#3a3a80]/50 backdrop-blur-sm text-gray-300 hover:text-[#00ffff] px-3 py-1.5 rounded-lg border border-[#9370db]/20 hover:border-[#9370db]/40 transition-all duration-300 text-sm flex items-center gap-1.5"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                 </svg>
-                Refresh
+                Refresh Insights
               </button>
             </div>
 
@@ -754,9 +765,13 @@ function ResultsContent() {
                       
                       <button
                         onClick={() => handleViewDetails(assessment._id)}
-                        className="gradient-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg text-sm cursor-pointer"
+                        className="gradient-primary text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition-all duration-300 text-sm flex items-center gap-1.5"
                       >
-                        View Details
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        View Career DNA Analysis
                       </button>
                     </div>
                   </div>
@@ -887,7 +902,9 @@ function ResultsLoading() {
     <div className="min-h-screen gradient-hero flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#00ffff] mx-auto"></div>
-        <p className="mt-4 text-[#00ffff] text-lg font-medium">Loading results...</p>
+        <p className="mt-4 text-[#00ffff] text-lg">
+          Preparing your career intelligence report...
+        </p>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import Head from 'next/head';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -49,6 +50,11 @@ export default function Login() {
 
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Head>
+        <title>Sign In to CareerPathfinder - Access Your Career Assessment</title>
+        <meta name="description" content="Sign in to your CareerPathfinder account to access your personalized career recommendations and assessment results." />
+        <meta name="keywords" content="career login, sign in, career assessment portal, personalized career dashboard, career tools access, professional development login" />
+      </Head>
       <div className="max-w-md w-full space-y-8 bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-emerald-500/20">
         <div>
           <h1 className="text-center text-3xl font-bold text-gradient-primary">Career Quest</h1>

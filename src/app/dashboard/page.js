@@ -24,7 +24,7 @@ export default function Dashboard() {
       <div className="min-h-screen gradient-hero flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#00ffff] mx-auto"></div>
-          <p className="mt-4 text-[#00ffff] text-lg">Loading your dashboard...</p>
+          <p className="mt-4 text-[#00ffff] text-lg">Initializing your Career Command Center...</p>
         </div>
       </div>
     );
@@ -41,14 +41,14 @@ export default function Dashboard() {
       <div className="min-h-screen gradient-hero flex items-center justify-center">
         <div className="text-center bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-[#9370db]/20 max-w-md">
           <div className="text-[#00ffff] text-4xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold text-white mb-4">Error Loading Dashboard</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Career Dashboard Temporarily Offline</h2>
           <p className="text-gray-300 mb-6">{error}</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={() => window.location.reload()}
               className="gradient-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium cursor-pointer"
             >
-              Try Again
+              Reconnect to Career Hub
             </button>
             <button
               onClick={() => router.push('/')}
@@ -66,9 +66,11 @@ export default function Dashboard() {
     <div className="min-h-screen gradient-hero py-6 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff]">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff]">
             Welcome, {session?.user?.name || (session?.user?.email ? session.user.email.split('@')[0] : 'User')}
-          </h1>
+            </h1>
+          </div>
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className="bg-[#1a1a40]/80 backdrop-blur-lg text-gray-300 hover:text-[#00ffff] px-4 py-2 rounded-lg border border-[#9370db]/20 hover:border-[#9370db]/40 transition-all duration-300 text-sm flex items-center gap-2 cursor-pointer"
@@ -88,13 +90,13 @@ export default function Dashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-300 mb-2">Text-Based Recommendations</h3>
-              <p className="text-sm text-gray-400 mb-4">Describe your interests and get personalized career suggestions</p>
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">AI Career Whisperer</h3>
+              <p className="text-sm text-gray-400 mb-4">Describe your professional identity for AI-powered career insights</p>
               <Link
                 href="/text-recommendations"
                 className="w-full bg-[#4b0082]/30 text-[#9370db] px-6 py-3 rounded-lg hover:bg-[#4b0082]/40 transition-all duration-300 font-medium shadow-lg hover:shadow-[#9370db]/20 text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
-                Get Started
+                Discover Your Path
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
@@ -109,13 +111,13 @@ export default function Dashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-300 mb-2">Interactive Quiz</h3>
-              <p className="text-sm text-gray-400 mb-4">Take our structured assessment to discover your ideal career path</p>
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">Career DNA Assessment</h3>
+              <p className="text-sm text-gray-400 mb-4">Take our neural assessment to decode your ideal career match</p>
               <Link
                 href="/quiz"
                 className="w-full bg-[#00ffff]/20 text-[#00ffff] px-6 py-3 rounded-lg hover:bg-[#00ffff]/30 transition-all duration-300 font-medium shadow-lg hover:shadow-[#00ffff]/20 text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
-                Start Assessment
+                Map Your Career DNA
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
@@ -130,13 +132,13 @@ export default function Dashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-300 mb-2">Assessment History</h3>
-              <p className="text-sm text-gray-400 mb-4">View your past assessments and career recommendations</p>
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">Career Journey Insights</h3>
+              <p className="text-sm text-gray-400 mb-4">Explore your career assessment history and recommendation timeline</p>
               <Link
                 href="/results"
                 className="w-full bg-[#9370db]/20 text-[#9370db] px-6 py-3 rounded-lg hover:bg-[#9370db]/30 transition-all duration-300 font-medium shadow-lg hover:shadow-[#9370db]/20 text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
-                View History
+                Access Your Timeline
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
@@ -147,7 +149,7 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-[#9370db]/20">
-            <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">Career Resources</h3>
+            <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">Professional Growth Resources</h3>
             <ul className="space-y-3">
               <li>
                 <a href="https://www.onetonline.org/" target="_blank" rel="noopener noreferrer" className="flex items-start p-2 rounded-lg hover:bg-[#9370db]/10 transition-all duration-300 cursor-pointer">
@@ -194,7 +196,7 @@ export default function Dashboard() {
           </div>
 
           <div className="bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-[#00ffff]/20">
-            <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00ffff] to-[#9370db] mb-4">Career Events</h3>
+            <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00ffff] to-[#9370db] mb-4">Career Development Events</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
                 <div className="w-10 h-10 bg-[#00ffff]/20 rounded-lg flex flex-col items-center justify-center mr-3">

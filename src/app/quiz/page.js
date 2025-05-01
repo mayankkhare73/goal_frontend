@@ -163,7 +163,7 @@ export default function Quiz() {
             <div className="min-h-screen gradient-hero flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#00ffff] mx-auto"></div>
-                    <p className="mt-4 text-[#00ffff] text-lg">Loading your career assessment...</p>
+                    <p className="mt-4 text-[#00ffff] text-lg">Preparing your career DNA assessment...</p>
                 </div>
             </div>
         );
@@ -180,7 +180,7 @@ export default function Quiz() {
             <div className="min-h-screen gradient-hero flex items-center justify-center">
                 <div className="bg-[#3a3a80]/70 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-[#9370db]/20 max-w-md mx-4">
                     <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-                        Error Loading Quiz
+                        Career Compass Temporarily Unavailable
                     </h2>
                     <p className="text-gray-300 mb-6">{error}</p>
                     <div className="flex justify-center space-x-4">
@@ -188,13 +188,13 @@ export default function Quiz() {
                             onClick={() => window.location.reload()}
                             className="gradient-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg hover:shadow-[#9370db]/20"
                         >
-                            Try Again
+                            Reconnect to Assessment
                         </button>
                         <Link
                             href="/dashboard"
                             className="gradient-accent text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-lg hover:shadow-[#00ffff]/20"
                         >
-                            Back to Dashboard
+                            Return to Command Center
                         </Link>
                     </div>
                 </div>
@@ -205,11 +205,15 @@ export default function Quiz() {
     // Get current question, with safety check
     const currentQuestion = questions[currentQuestionIndex] || {};
     console.log('Current Question:', currentQuestion);
+    console.log('Question Type:', typeof currentQuestion?.question);
+    console.log('Question Value:', currentQuestion?.question);
     
-    // Parse question text safely
-    const questionText = typeof currentQuestion?.text === 'object' 
-        ? (currentQuestion?.text?.text || JSON.stringify(currentQuestion?.text))
-        : currentQuestion?.text || 'Loading question...';
+    // Parse question text safely - fixed to use the correct field name
+    let questionText = 'Question loading...';
+    
+    if (currentQuestion && currentQuestion.question) {
+        questionText = currentQuestion.question;
+    }
     
     // Calculate progress
     const progress = ((currentQuestionIndex + 1) / Math.max(questions.length, 1)) * 100;
