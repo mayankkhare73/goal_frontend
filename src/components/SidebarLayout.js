@@ -16,9 +16,9 @@ export default function SidebarLayout({ children }) {
   const showSidebar = status === 'authenticated';
   
   return (
-    <div className={`min-h-screen bg-[#2a2a60] ${showSidebar ? 'with-sidebar' : ''}`}>
+    <div className={"min-h-screen bg-[#2a2a60] " + (showSidebar ? 'with-sidebar' : '') + " flex flex-col"}>
       {showSidebar && <Sidebar />}
-      <main className={`transition-all duration-300 ${showSidebar ? 'md:ml-60' : ''}`}>
+      <main className={"transition-all duration-300 " + (showSidebar ? 'md:ml-60' : '') + " flex-grow"}>
         {children}
       </main>
     </div>

@@ -58,6 +58,14 @@ export async function POST(request) {
     try {
       recommendationsData = await generateCareerRecommendations(formattedResponses);
       
+      // Add a timestamp to each recommendation to avoid caching issues
+      if (recommendationsData && recommendationsData.recommendations) {
+        recommendationsData.recommendations = recommendationsData.recommendations.map(rec => ({
+          ...rec,
+          timestamp: new Date().toISOString() // Add timestamp to each recommendation
+        }));
+      }
+      
       // Validate that we have recommendations and they're properly structured
       if (!recommendationsData || !recommendationsData.recommendations || !Array.isArray(recommendationsData.recommendations)) {
         console.error('Invalid recommendations format received:', recommendationsData);

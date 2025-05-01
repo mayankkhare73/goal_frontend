@@ -175,6 +175,17 @@ export default function Login() {
               GitHub
             </button>
           </div>
+          
+          <div className="mt-6 text-center text-xs text-gray-500">
+            By signing in, you agree to our{' '}
+            <a href="/terms" target="_blank" className="text-emerald-500 hover:text-emerald-400 transition-colors duration-300 cursor-pointer">
+              Terms and Conditions
+            </a>{' '}
+            and{' '}
+            <a href="/privacy" target="_blank" className="text-emerald-500 hover:text-emerald-400 transition-colors duration-300 cursor-pointer">
+              Privacy Policy
+            </a>
+          </div>
         </div>
       </div>
     </div>

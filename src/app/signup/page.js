@@ -169,11 +169,11 @@ export default function SignUp() {
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-400">
               I accept the{' '}
-              <a href="#" className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">
-                Terms of Service
+              <a href="/terms" target="_blank" className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">
+                Terms and Conditions
               </a>{' '}
               and{' '}
-              <a href="#" className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">
+              <a href="/privacy" target="_blank" className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">
                 Privacy Policy
               </a>
             </label>
@@ -213,7 +213,7 @@ export default function SignUp() {
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button
               onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm bg-gray-900/50 text-gray-300 hover:bg-gray-800 transition-all duration-300"
+              className="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm bg-gray-900/50 text-gray-300 hover:bg-gray-800 transition-all duration-300 cursor-pointer"
             >
               <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z" fill="currentColor"/>
@@ -223,7 +223,7 @@ export default function SignUp() {
 
             <button
               onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm bg-gray-900/50 text-gray-300 hover:bg-gray-800 transition-all duration-300"
+              className="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm bg-gray-900/50 text-gray-300 hover:bg-gray-800 transition-all duration-300 cursor-pointer"
             >
               <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2C6.477 2 2 6.477 2 12C2 16.418 4.865 20.166 8.84 21.489C9.34 21.581 9.523 21.276 9.523 21.012C9.523 20.775 9.513 19.988 9.513 19.151C7 19.696 6.35 18.529 6.15 17.93C6.037 17.634 5.55 16.725 5.125 16.488C4.775 16.3 4.275 15.755 5.115 15.744C5.9 15.732 6.462 16.457 6.65 16.764C7.55 18.27 8.988 17.968 9.56 17.704C9.651 17.032 9.921 16.585 10.225 16.328C7.975 16.07 5.625 15.248 5.625 11.465C5.625 10.391 6.037 9.503 6.675 8.802C6.574 8.55 6.2 7.563 6.775 6.175C6.775 6.175 7.613 5.911 9.524 7.214C10.325 6.996 11.175 6.887 12.025 6.887C12.875 6.887 13.725 6.996 14.526 7.214C16.437 5.9 17.275 6.175 17.275 6.175C17.85 7.563 17.476 8.55 17.375 8.802C18.013 9.503 18.425 10.38 18.425 11.465C18.425 15.26 16.064 16.07 13.814 16.328C14.2 16.65 14.538 17.27 14.538 18.233C14.538 19.61 14.526 20.675 14.526 21.012C14.526 21.276 14.714 21.591 15.214 21.489C19.135 20.165 22 16.417 22 12C22 6.477 17.523 2 12 2Z" fill="currentColor"/>

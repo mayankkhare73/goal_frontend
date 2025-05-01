@@ -637,14 +637,16 @@ export async function generateCareerRecommendations(quizResponses) {
     ${formattedResponses}
 
     IMPORTANT INSTRUCTIONS (READ CAREFULLY):
-    1. YOU MUST PROVIDE EXACTLY 3 DIFFERENT CAREER RECOMMENDATIONS
+    1. YOU MUST PROVIDE EXACTLY 3 COMPLETELY DIFFERENT AND VARIED CAREER RECOMMENDATIONS based strictly on the quiz responses
     2. Each recommendation must have a match score between 0.65 and 1.0
-    3. Recommendations MUST be diverse (mix of government and private sector)
-    4. Each recommendation must be complete with all fields filled in
-    5. DO NOT cut off any parts of recommendations
-    6. Make sure each recommendation has a unique title
-    7. Ensure all 3 recommendations appear in the final response
-    8. The recommendations should be ordered from best match to lowest match
+    3. Recommendations MUST be diverse in nature (different fields, different industries, mix of government and private sector)
+    4. Do NOT include similar careers or ones in the same category in your recommendations
+    5. Each recommendation must be complete with all fields filled in
+    6. DO NOT cut off any parts of recommendations
+    7. Make sure each recommendation has a unique title
+    8. Ensure all 3 recommendations appear in the final response
+    9. The recommendations should be ordered from best match to lowest match
+    10. Be creative and insightful in matching careers to the person's interests
 
     Please provide comprehensive career recommendations in the following JSON format. Do not include any markdown formatting or additional text outside the JSON object:
 
@@ -778,7 +780,9 @@ export async function generateCareerRecommendations(quizResponses) {
           parts: [{ text: CAREER_PROMPT_TEMPLATE }]
         }],
         generationConfig: {
-          temperature: 0.7,
+          temperature: 0.9,
+          topK: 50,
+          topP: 0.97,
           maxOutputTokens: 8192
         }
       })

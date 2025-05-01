@@ -106,8 +106,8 @@ export default function Quiz() {
 
             console.log('Submitting quiz responses:', finalResponses);
 
-            // Use the API endpoint
-            const response = await fetch('/api/quiz/submit', {
+            // Use the API endpoint with a unique timestamp to avoid caching
+            const response = await fetch(`/api/quiz/submit?t=${Date.now()}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
