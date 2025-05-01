@@ -1,26 +1,56 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db';
 import AssessmentHistory from '@/models/AssessmentHistory';
 import { generateTextBasedRecommendations } from '@/services/gptService';
 
 export async function POST(request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || !session.user) {
+      console.log('Unauthorized text-recommendations request - no session');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
+    console.log('Processing text recommendations for user:', session.user.id);
     const userId = session.user.id;
-    const { textInput } = await request.json();
+    
+    // Parse request body
+    let textInput;
+    try {
+      const body = await request.json();
+      textInput = body.textInput;
+    } catch (e) {
+      console.error('Invalid request body:', e);
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
     
     if (!textInput) {
+      console.log('Text input is missing in the request');
       return NextResponse.json({ error: 'Text input is required' }, { status: 400 });
     }
 
+    console.log('Generating text-based recommendations for text input:', textInput.substring(0, 100) + '...');
+    
     // Generate recommendations using the text-based function
-    const recommendations = await generateTextBasedRecommendations(textInput);
+    let recommendations;
+    try {
+      recommendations = await generateTextBasedRecommendations(textInput);
+      console.log(`Successfully generated ${recommendations.length} recommendations`);
+    } catch (error) {
+      console.error('Error generating recommendations:', error);
+      return NextResponse.json({ 
+        error: 'Failed to generate recommendations', 
+        details: error.message 
+      }, { status: 500 });
+    }
+    
+    if (!recommendations || !Array.isArray(recommendations) || recommendations.length === 0) {
+      console.error('Invalid recommendations returned from service:', recommendations);
+      return NextResponse.json({ error: 'Failed to generate valid recommendations' }, { status: 500 });
+    }
 
     // Format recommendations to match the schema
     const formattedRecommendations = recommendations.map(rec => ({
@@ -109,22 +139,35 @@ export async function POST(request) {
       })) : []
     }));
 
-    await connectDB();
-    
-    // Save to assessment history
-    const assessment = new AssessmentHistory({
-      user: userId,
-      responses: [], // No quiz responses for text-based input
+    try {
+      await connectDB();
+      
+      // Save to assessment history
+      const assessment = new AssessmentHistory({
+        user: userId,
+        responses: [], // No quiz responses for text-based input
+        recommendations: formattedRecommendations,
+        type: 'text-based',
+        inputText: textInput
+      });
+  
+      await assessment.save();
+      console.log('Text-based assessment saved successfully with ID:', assessment._id);
+    } catch (dbError) {
+      // Still return the recommendations even if saving to DB fails
+      console.error('Error saving assessment to database:', dbError);
+      // Continue with returning the recommendations
+    }
+
+    return NextResponse.json({ 
       recommendations: formattedRecommendations,
-      type: 'text-based',
-      inputText: textInput
+      success: true
     });
-
-    await assessment.save();
-
-    return NextResponse.json({ recommendations: formattedRecommendations });
   } catch (error) {
-    console.error('Error generating text-based recommendations:', error);
-    return NextResponse.json({ error: 'Failed to generate recommendations' }, { status: 500 });
+    console.error('Error in text-recommendations endpoint:', error);
+    return NextResponse.json({ 
+      error: 'Failed to generate recommendations', 
+      details: error.message 
+    }, { status: 500 });
   }
 } 

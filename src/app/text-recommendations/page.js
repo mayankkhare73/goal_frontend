@@ -11,11 +11,13 @@ export default function TextRecommendations() {
     const [textInput, setTextInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [processingStage, setProcessingStage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        setProcessingStage('Starting');
 
         try {
             // Check if user is authenticated
@@ -24,7 +26,13 @@ export default function TextRecommendations() {
                 return;
             }
 
-            // Use the new API endpoint
+            if (!textInput || textInput.trim().length < 20) {
+                throw new Error('Please provide a more detailed description of your interests and career goals');
+            }
+
+            setProcessingStage('Sending request to AI for analysis...');
+            
+            // Use the API endpoint
             const response = await fetch('/api/assessment/text-recommendations', {
                 method: 'POST',
                 headers: {
@@ -34,16 +42,32 @@ export default function TextRecommendations() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to generate recommendations');
+                const errorData = await response.json();
+                throw new Error(errorData.error || errorData.details || 'Failed to generate recommendations');
             }
 
+            setProcessingStage('Processing AI response...');
             const data = await response.json();
+            
+            if (!data.recommendations || !Array.isArray(data.recommendations) || data.recommendations.length === 0) {
+                console.error('Invalid recommendations format:', data);
+                throw new Error('No valid recommendations returned from the AI');
+            }
+
+            setProcessingStage('Preparing results...');
+            console.log('Recommendations received:', data.recommendations.length);
+            
+            // Store recommendations in local storage
             localStorage.setItem('recommendations', JSON.stringify(data.recommendations));
+            
+            // Navigate to results page
             router.push('/results');
         } catch (error) {
-            setError(error.message);
+            console.error('Error generating text recommendations:', error);
+            setError(error.message || 'An unexpected error occurred. Please try again.');
         } finally {
             setLoading(false);
+            setProcessingStage('');
         }
     };
 
@@ -102,7 +126,12 @@ export default function TextRecommendations() {
                                 className="w-full h-48 sm:h-64 bg-gray-700/50 border border-cyan-500/20 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none text-sm sm:text-base"
                                 placeholder="Example: I have a background in computer science and enjoy problem-solving. I'm interested in working with data and creating innovative solutions. I prefer roles that allow for creativity and continuous learning..."
                                 required
+                                disabled={loading}
+                                minLength={20}
                             />
+                            <p className="mt-1 text-xs text-gray-400">
+                                Add as much detail as possible for the best recommendations (minimum 20 characters)
+                            </p>
                         </div>
 
                         {error && (
@@ -111,16 +140,22 @@ export default function TextRecommendations() {
                             </div>
                         )}
 
+                        {loading && processingStage && (
+                            <div className="bg-blue-500/20 border border-blue-500/50 text-blue-400 px-4 py-3 rounded-lg text-sm sm:text-base">
+                                {processingStage}
+                            </div>
+                        )}
+
                         <div className="flex flex-col sm:flex-row justify-end gap-4">
                             <Link
                                 href="/quiz"
-                                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20 text-sm sm:text-base text-center"
+                                className={`bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/20 text-sm sm:text-base text-center ${loading ? 'opacity-50 pointer-events-none' : ''}`}
                             >
                                 Take Quiz Instead
                             </Link>
                             <button
                                 type="submit"
-                                disabled={loading}
+                                disabled={loading || textInput.trim().length < 20}
                                 className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             >
                                 {loading ? (

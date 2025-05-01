@@ -85,6 +85,7 @@ export default function Quiz() {
 
     const handleSubmit = async () => {
         setSubmitting(true);
+        setError(null);
         try {
             // Check if user is authenticated
             if (status === 'unauthenticated') {
@@ -97,7 +98,9 @@ export default function Quiz() {
                 answer: currentAnswers 
             }];
 
-            // Use the new API endpoint
+            console.log('Submitting quiz responses:', finalResponses);
+
+            // Use the API endpoint
             const response = await fetch('/api/quiz/submit', {
                 method: 'POST',
                 headers: {
@@ -107,14 +110,27 @@ export default function Quiz() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to submit quiz');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to submit quiz');
             }
 
             const data = await response.json();
+            
+            if (!data.recommendations || !Array.isArray(data.recommendations) || data.recommendations.length === 0) {
+                console.error('Received invalid recommendations format:', data);
+                throw new Error('No valid career recommendations were generated');
+            }
+            
+            console.log(`Received ${data.recommendations.length} recommendations from API`);
+            
+            // Store recommendations in localStorage
             localStorage.setItem('recommendations', JSON.stringify(data.recommendations));
+            
+            // Navigate to results page
             router.push('/results');
         } catch (error) {
-            setError(error.message);
+            console.error('Error submitting quiz:', error);
+            setError(error.message || 'An unexpected error occurred');
         } finally {
             setSubmitting(false);
         }

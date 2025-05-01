@@ -80,20 +80,46 @@ function ResultsContent() {
       return [];
     }
 
-    // Filter recommendations with match score above 0.5 (50%)
-    const suitableRecommendations = recommendations.filter(rec => {
-      if (!rec || typeof rec.match_score !== 'number') {
-        console.warn('Invalid recommendation:', rec);
+    console.log(`Processing ${recommendations.length} recommendations`);
+
+    // Filter out invalid recommendations
+    const validRecommendations = recommendations.filter(rec => {
+      if (!rec || typeof rec.match_score !== 'number' || !rec.title) {
+        console.warn('Invalid recommendation object:', rec);
         return false;
       }
-      return rec.match_score >= 0.5;
+      return true;
     });
     
-    // Sort by match score in descending order
-    suitableRecommendations.sort((a, b) => b.match_score - a.match_score);
+    if (validRecommendations.length === 0) {
+      console.warn('No valid recommendations found after filtering');
+      // If there are no valid recommendations, return an empty array
+      return [];
+    }
+
+    // Sort all valid recommendations by match score in descending order
+    validRecommendations.sort((a, b) => b.match_score - a.match_score);
     
-    // Return top 3 recommendations
-    return suitableRecommendations.slice(0, 3);
+    // Filter recommendations with match score above 0.5 (50%)
+    let suitableRecommendations = validRecommendations.filter(rec => rec.match_score >= 0.5);
+    
+    // If we have suitable recommendations (>=50% match), take 3-5 of them
+    if (suitableRecommendations.length > 0) {
+      // Take all if we have 5 or fewer suitable recommendations
+      if (suitableRecommendations.length <= 5) {
+        console.log(`Returning all ${suitableRecommendations.length} suitable recommendations (all have >=50% match)`);
+        return suitableRecommendations;
+      }
+      
+      // Otherwise take the top 5
+      const result = suitableRecommendations.slice(0, 5);
+      console.log(`Returning top 5 of ${suitableRecommendations.length} suitable recommendations`);
+      return result;
+    }
+    
+    // If no recommendations meet the 50% threshold, return top 3 of all valid recommendations
+    console.log('No recommendations met the 50% threshold, using top 3 of all valid recommendations');
+    return validRecommendations.slice(0, 3);
   };
 
   const renderDetailedAnalysis = (career) => {

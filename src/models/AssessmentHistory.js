@@ -78,7 +78,10 @@ const assessmentHistorySchema = new mongoose.Schema({
       },
       benefits: [String],
       bonus_structure: String,
-      retirement_benefits: String
+      retirement_benefits: {
+        type: mongoose.Schema.Types.Mixed,
+        default: ""
+      }
     },
     action_plan: {
       immediate_steps: [String],
