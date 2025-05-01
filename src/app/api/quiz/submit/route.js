@@ -46,6 +46,7 @@ export async function POST(request) {
 
       return {
         questionId: response.questionId,
+        question: question.text,
         answer: response.answer,
         timestamp: new Date()
       };
@@ -55,7 +56,7 @@ export async function POST(request) {
     console.log('Generating career recommendations for quiz responses...');
     let recommendationsData;
     try {
-      recommendationsData = await generateCareerRecommendations(responses);
+      recommendationsData = await generateCareerRecommendations(formattedResponses);
       
       // Validate that we have recommendations and they're properly structured
       if (!recommendationsData || !recommendationsData.recommendations || !Array.isArray(recommendationsData.recommendations)) {
