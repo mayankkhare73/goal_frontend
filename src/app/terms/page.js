@@ -43,6 +43,14 @@ export default function TermsAndConditions() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Career Recommendations</h2>
             <p>The career recommendations provided are for informational purposes only. Our AI-generated suggestions are based on the information you provide and should not be considered as professional career advice.</p>
+            <p className="text-amber-400 font-medium">Important Disclaimer:</p>
+            <ul className="list-disc pl-5 space-y-2 text-gray-300">
+              <li>The career recommendations are based solely on the analysis of the information you provide during assessment.</li>
+              <li>We do not guarantee employment, income, or success in any field suggested by our platform.</li>
+              <li>You are responsible for your career decisions and should consider multiple factors including market conditions, personal qualifications, and professional guidance.</li>
+              <li>We strongly recommend consulting with professional career counselors, industry professionals, or educational advisors before making significant career decisions.</li>
+              <li>You retain complete freedom to choose your own career path based on your personal preferences, circumstances, and judgment.</li>
+            </ul>
           </section>
           
           <section className="space-y-3">

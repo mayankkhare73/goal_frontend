@@ -596,7 +596,32 @@ function ResultsContent() {
 
   return (
     <div className="min-h-screen gradient-hero py-8 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Disclaimer Banner */}
+        <div className="bg-gradient-to-r from-[#1a1a40]/80 to-[#3a3a80]/70 backdrop-blur-md border border-[#9370db]/30 rounded-xl shadow-lg p-4 mb-8">
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0 mt-1">
+              <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-amber-400">Career Recommendation Disclaimer</h3>
+              <p className="text-xs text-gray-300 mt-1">
+                The career recommendations provided are based solely on your assessment inputs and our AI analysis. 
+                These suggestions are meant to be informative rather than prescriptive. 
+                You are free to choose your own career path based on your personal circumstances, preferences, and opportunities.
+                For important career decisions, we recommend consulting with professional career counselors.
+              </p>
+              <div className="mt-2 text-right">
+                <Link href="/disclaimer" className="text-xs text-[#9370db] hover:text-[#00ffff] transition-colors">
+                  Read Full Disclaimer
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff]">
             {showingAssessmentDetails ? "Career Recommendations" : "Assessment History"}

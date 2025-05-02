@@ -6,13 +6,29 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function HomePage() {
   const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+  const { data: session } = useSession();
   
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    
+    // Redirect logged-in users to dashboard
+    if (session) {
+      router.push('/dashboard');
+    }
+  }, [session, router]);
+  
+  // If user is authenticated, don't render the home page content
+  if (session) {
+    return <div className="min-h-screen gradient-hero flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00ffff]"></div>
+    </div>;
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a40] to-[#2a2a60]">
@@ -157,6 +173,16 @@ export default function HomePage() {
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
             Join thousands who have found career clarity and purpose with our AI-powered assessment tool
           </p>
+          
+          {/* Disclaimer Note */}
+          <div className="bg-[#1a1a40]/50 backdrop-blur-sm border border-[#9370db]/30 rounded-lg p-4 mb-8 max-w-3xl mx-auto">
+            <p className="text-sm text-gray-400 italic">
+              <span className="text-emerald-400 font-medium">Disclaimer:</span> All career recommendations provided are based solely on your assessment inputs and our AI analysis. 
+              These suggestions are meant to be informative rather than prescriptive. 
+              You remain free to choose your own career path based on your personal circumstances, preferences, and opportunities.
+            </p>
+          </div>
+          
           <Link 
             href="/signup" 
             className="gradient-primary text-white px-8 py-4 rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-lg inline-block"
@@ -200,6 +226,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/terms" className="hover:text-emerald-400 transition-colors">Terms of Service</Link></li>
                 <li><Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/disclaimer" className="hover:text-emerald-400 transition-colors">Disclaimer</Link></li>
               </ul>
             </div>
           </div>

@@ -44,9 +44,8 @@ export default function PrivacyPolicy() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. How We Use Your Information</h2>
-            <p>We use the information we collect to:</p>
+            <p>We use your personal information to:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Provide, maintain, and improve our services</li>
               <li>Generate personalized career recommendations</li>
               <li>Create and maintain your account</li>
               <li>Communicate with you about our services</li>
@@ -57,7 +56,20 @@ export default function PrivacyPolicy() {
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">4. Sharing Your Information</h2>
+            <h2 className="text-xl font-semibold text-white">4. Career Recommendations Disclaimer</h2>
+            <p>Our AI-powered career recommendations system processes your assessment data to suggest potential career paths. Please note:</p>
+            <ul className="list-disc pl-6 space-y-2 text-gray-300">
+              <li>Our suggestions are based solely on the information you provide during the assessment</li>
+              <li>Results are algorithmic in nature and not a guarantee of suitability or success</li>
+              <li>We do not share your specific career assessment results with third parties without your consent</li>
+              <li>You maintain full autonomy in your career choices regardless of our suggestions</li>
+              <li>We do not track or monitor your actual career decisions following our recommendations</li>
+            </ul>
+            <p className="mt-2 text-amber-400">We encourage users to treat our recommendations as one of many tools in their career decision-making process.</p>
+          </section>
+          
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold text-white">5. Sharing Your Information</h2>
             <p>We may share your information with:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Service providers who perform services on our behalf</li>
@@ -69,12 +81,12 @@ export default function PrivacyPolicy() {
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">5. Data Security</h2>
+            <h2 className="text-xl font-semibold text-white">6. Data Security</h2>
             <p>We implement appropriate technical and organizational measures to protect your personal information. However, no electronic transmission or storage system is 100% secure, and we cannot guarantee absolute security.</p>
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">6. Your Rights</h2>
+            <h2 className="text-xl font-semibold text-white">7. Your Rights</h2>
             <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Accessing your personal information</li>
@@ -88,17 +100,17 @@ export default function PrivacyPolicy() {
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">7. Children&apos;s Privacy</h2>
+            <h2 className="text-xl font-semibold text-white">8. Children&apos;s Privacy</h2>
             <p>Our services are not intended for individuals under 16 years of age. We do not knowingly collect personal information from children under 16.</p>
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">8. Changes to This Privacy Policy</h2>
+            <h2 className="text-xl font-semibold text-white">9. Changes to This Privacy Policy</h2>
             <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date.</p>
           </section>
           
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">9. Contact Us</h2>
+            <h2 className="text-xl font-semibold text-white">10. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy, please contact us at privacy@careerpathfinder.com</p>
           </section>
         </div>
