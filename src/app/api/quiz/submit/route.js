@@ -493,15 +493,15 @@ export async function POST(request) {
     // Create an assessment record with user ID and responses
     try {
       await connectDB();
-      
-      // Save to assessment history
-      const assessment = new AssessmentHistory({
-        user: userId,
-        responses: formattedResponses,
+
+    // Save to assessment history
+    const assessment = new AssessmentHistory({
+      user: userId,
+      responses: formattedResponses,
         recommendations: recommendationsData.recommendations,
-        type: 'quiz'
-      });
-  
+      type: 'quiz'
+    });
+
       await assessment.save();
       console.log('Quiz assessment saved successfully with ID:', assessment._id);
       
@@ -515,10 +515,10 @@ export async function POST(request) {
     } catch (dbError) {
       console.error('Error saving assessment to database:', dbError);
       // Return the recommendations even if DB save fails, but without the assessment ID
-      return NextResponse.json({ 
+    return NextResponse.json({
         recommendations: recommendationsData.recommendations,
         success: true 
-      });
+    });
     }
   } catch (error) {
     console.error('Error processing quiz submission:', error);

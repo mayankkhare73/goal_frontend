@@ -7,91 +7,13 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-// Simple client-only testimonial component
-function TestimonialsSection({ testimonials, activeTestimonial, setActiveTestimonial }) {
-  return (
-    <section className="py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-            Success Stories
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            See how CareerPathfinder has helped people find their dream careers
-          </p>
-        </div>
-        
-        <div className="bg-[#3a3a80]/30 backdrop-blur-sm border border-[#9370db]/20 rounded-xl p-6 md:p-8 shadow-xl">
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            <div className="md:w-1/3">
-              <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
-                <Image 
-                  src={testimonials[activeTestimonial].image} 
-                  alt={testimonials[activeTestimonial].name}
-                  className="rounded-full border-4 border-emerald-500/30 object-cover"
-                  fill
-                  sizes="(max-width: 768px) 96px, 128px"
-                />
-              </div>
-              <div className="text-center mt-4">
-                <h3 className="text-xl font-semibold text-white">{testimonials[activeTestimonial].name}</h3>
-                <p className="text-emerald-400">{testimonials[activeTestimonial].role}</p>
-              </div>
-              <div className="flex justify-center gap-2 mt-4">
-                {testimonials.map((_, index) => (
-                  <button 
-                    key={index}
-                    onClick={() => setActiveTestimonial(index)}
-                    className={`w-3 h-3 rounded-full ${activeTestimonial === index ? 'bg-emerald-500' : 'bg-gray-600'}`}
-                    aria-label={`View testimonial ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="md:w-2/3">
-              <svg className="h-12 w-12 text-emerald-500/30 mb-4" fill="currentColor" viewBox="0 0 32 32">
-                <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-              </svg>
-              <p className="text-lg text-gray-300 italic">
-                {testimonials[activeTestimonial].text}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default function MarketingPage() {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+export default function HomePage() {
   const [isClient, setIsClient] = useState(false);
   
   useEffect(() => {
     setIsClient(true);
   }, []);
   
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Software Developer",
-      image: "https://randomuser.me/api/portraits/women/32.jpg",
-      text: "CareerPathfinder helped me transition from teaching to tech. The personalized recommendations matched my skills perfectly with software development roles."
-    },
-    {
-      name: "Michael Chen",
-      role: "Marketing Specialist",
-      image: "https://randomuser.me/api/portraits/men/46.jpg",
-      text: "After feeling stuck in my career, the AI assessment revealed marketing roles that aligned with my creativity and analytical skills. Now I'm thriving in a job I love!"
-    },
-    {
-      name: "Aisha Patel",
-      role: "Healthcare Administrator",
-      image: "https://randomuser.me/api/portraits/women/65.jpg",
-      text: "The career quiz identified healthcare administration as a perfect match for my organizational skills and desire to help people. I've never been happier professionally."
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a40] to-[#2a2a60]">
       {/* Hero Section */}
@@ -126,48 +48,50 @@ export default function MarketingPage() {
                 No credit card required • Free personalized report
               </div>
             </div>
-            <div className="md:w-1/2 mt-12 md:mt-0 relative">
-              <div className="bg-[#3a3a80]/50 backdrop-blur-sm border border-[#9370db]/20 rounded-2xl p-6 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                <div className="relative w-full h-[300px]">
-                  <Image 
-                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" 
-                    alt="Career Assessment" 
-                    className="rounded-lg shadow-lg object-cover"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="mt-4 bg-[#2a2a60]/80 backdrop-blur-sm rounded-lg p-4 border border-[#9370db]/10">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-emerald-400 font-semibold">Career Match Results</div>
-                    <div className="text-xs text-gray-400">5 min ago</div>
+            {isClient && (
+              <div className="md:w-1/2 mt-12 md:mt-0 relative">
+                <div className="bg-[#3a3a80]/50 backdrop-blur-sm border border-[#9370db]/20 rounded-2xl p-6 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                  <div className="relative w-full h-[300px]">
+                    <Image 
+                      src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" 
+                      alt="Career Assessment" 
+                      className="rounded-lg shadow-lg object-cover"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Data Scientist</span>
-                      <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '92%'}}></div>
-                      </div>
-                      <span className="text-gray-300 font-medium">92%</span>
+                  <div className="mt-4 bg-[#2a2a60]/80 backdrop-blur-sm rounded-lg p-4 border border-[#9370db]/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-emerald-400 font-semibold">Career Match Results</div>
+                      <div className="text-xs text-gray-400">5 min ago</div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-300">UX Designer</span>
-                      <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '87%'}}></div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">Data Scientist</span>
+                        <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '92%'}}></div>
+                        </div>
+                        <span className="text-gray-300 font-medium">92%</span>
                       </div>
-                      <span className="text-gray-300 font-medium">87%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Product Manager</span>
-                      <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '85%'}}></div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">UX Designer</span>
+                        <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '87%'}}></div>
+                        </div>
+                        <span className="text-gray-300 font-medium">87%</span>
                       </div>
-                      <span className="text-gray-300 font-medium">85%</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">Product Manager</span>
+                        <div className="w-1/2 bg-gray-700/50 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-emerald-500 to-[#00ffff] h-2 rounded-full" style={{width: '85%'}}></div>
+                        </div>
+                        <span className="text-gray-300 font-medium">85%</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </header>
@@ -224,15 +148,6 @@ export default function MarketingPage() {
         </div>
       </section>
 
-      {/* Testimonials Section - only render on client */}
-      {isClient && (
-        <TestimonialsSection 
-          testimonials={testimonials} 
-          activeTestimonial={activeTestimonial} 
-          setActiveTestimonial={setActiveTestimonial} 
-        />
-      )}
-
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-[#2a2a60] to-[#1a1a40]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -270,7 +185,6 @@ export default function MarketingPage() {
                 <li><Link href="/signup" className="hover:text-emerald-400 transition-colors">Get Started</Link></li>
                 <li><Link href="/login" className="hover:text-emerald-400 transition-colors">Sign In</Link></li>
                 <li><a href="#features" className="hover:text-emerald-400 transition-colors">Features</a></li>
-                <li><a href="#testimonials" className="hover:text-emerald-400 transition-colors">Testimonials</a></li>
               </ul>
             </div>
             <div>
@@ -279,15 +193,13 @@ export default function MarketingPage() {
                 <li><a href="#" className="hover:text-emerald-400 transition-colors">Career Blog</a></li>
                 <li><a href="#" className="hover:text-emerald-400 transition-colors">Industry Guides</a></li>
                 <li><a href="#" className="hover:text-emerald-400 transition-colors">FAQs</a></li>
-                <li><a href="#" className="hover:text-emerald-400 transition-colors">Support</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="/terms" target="_blank" className="hover:text-emerald-400 transition-colors">Terms of Service</a></li>
-                <li><a href="/privacy" target="_blank" className="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-emerald-400 transition-colors">Cookies</a></li>
+                <li><Link href="/terms" className="hover:text-emerald-400 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import Sidebar from './Sidebar';
+import Footer from './Footer';
 import { useEffect } from 'react';
 
 export default function SidebarLayout({ children }) {
@@ -21,6 +22,7 @@ export default function SidebarLayout({ children }) {
       <main className={"transition-all duration-300 " + (showSidebar ? 'md:ml-60' : '') + " flex-grow"}>
         {children}
       </main>
+      {!showSidebar && <Footer />}
     </div>
   );
 } 
