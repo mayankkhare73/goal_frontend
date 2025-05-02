@@ -38,10 +38,10 @@ export default function HomePage() {
           <div className="md:flex md:items-center md:space-x-12">
             <div className="md:w-1/2 z-10">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-6">
-                Discover Your Perfect Career Path
+                Find Your Perfect Career Match
               </h1>
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Our AI-powered assessment analyzes your unique skills, interests, and values to recommend careers that truly match who you are.
+                MatchCareer360 provides a comprehensive 360° view of career possibilities using AI to analyze your unique skills, interests, and values.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link 
@@ -117,10 +117,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-              How CareerPathfinder Works
+              How MatchCareer360 Works
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Our advanced AI algorithm analyzes multiple factors to find your perfect career match
+              Our advanced 360° analysis examines multiple factors to find your perfect career match
             </p>
           </div>
           
@@ -168,10 +168,10 @@ export default function HomePage() {
       <section className="py-16 bg-gradient-to-r from-[#2a2a60] to-[#1a1a40]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Discover Your Ideal Career Path?
+            Ready to Find Your Perfect Career Match?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Join thousands who have found career clarity and purpose with our AI-powered assessment tool
+            Join thousands who have discovered their ideal career path with our 360° AI-powered assessment
           </p>
           
           {/* Disclaimer Note */}
@@ -199,10 +199,10 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9370db] to-[#00ffff] mb-4">
-                CareerPathfinder
+                MatchCareer360
               </h3>
               <p className="text-gray-400">
-                AI-powered career discovery platform helping you find your perfect professional match.
+                AI-powered career matching platform providing a comprehensive 360° view of your professional possibilities.
               </p>
             </div>
             <div>
@@ -231,7 +231,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()} CareerPathfinder. All rights reserved.
+            © {new Date().getFullYear()} MatchCareer360. All rights reserved.
           </div>
         </div>
       </footer>

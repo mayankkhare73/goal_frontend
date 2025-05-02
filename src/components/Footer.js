@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="bg-[#1a1a40]/70 backdrop-blur-lg py-4 px-4 sm:px-6 border-t border-[#9370db]/20">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
         <div className="mb-4 md:mb-0">
-          <p>© {currentYear} CareerPathfinder. All rights reserved.</p>
+          <p>© {currentYear} MatchCareer360. All rights reserved.</p>
         </div>
         
         <div className="flex items-center space-x-6">
@@ -25,8 +25,14 @@ export default function Footer() {
           >
             Privacy Policy
           </Link>
+          <Link 
+            href="/disclaimer" 
+            className="text-gray-400 hover:text-[#00ffff] transition-colors duration-300 cursor-pointer"
+          >
+            Disclaimer
+          </Link>
           <a 
-            href="mailto:support@careerpathfinder.com" 
+            href="mailto:support@matchcareer360.com" 
             className="text-gray-400 hover:text-[#00ffff] transition-colors duration-300 cursor-pointer"
           >
             Contact

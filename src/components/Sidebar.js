@@ -138,7 +138,7 @@ export default function Sidebar() {
               href="/dashboard" 
               className="text-xl font-bold text-[#00ffff] hover:text-[#8cffff] transition"
             >
-              Career Finder
+              MatchCareer360
             </Link>
           </div>
 

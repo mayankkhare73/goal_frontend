@@ -22,7 +22,7 @@ export default function Disclaimer() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Nature of Career Recommendations</h2>
-            <p>The career recommendations provided by CareerPathfinder are generated using artificial intelligence based solely on the information you provide through our assessments. These recommendations are intended to be informative and suggestive rather than definitive or prescriptive.</p>
+            <p>The career recommendations provided by MatchCareer360 are generated using artificial intelligence based solely on the information you provide through our assessments. These recommendations are intended to be informative and suggestive rather than definitive or prescriptive.</p>
           </section>
           
           <section className="space-y-3">
@@ -53,7 +53,7 @@ export default function Disclaimer() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. No Guarantee of Success</h2>
-            <p>CareerPathfinder expressly disclaims any guarantee of:</p>
+            <p>MatchCareer360 expressly disclaims any guarantee of:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Employment or job placement in any field</li>
               <li>Income levels or financial outcomes</li>
@@ -65,7 +65,7 @@ export default function Disclaimer() {
           
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Educational Purposes Only</h2>
-            <p>The information provided through CareerPathfinder is for educational and informational purposes only. It is not intended to replace professional career counseling, academic advising, or job placement services.</p>
+            <p>The information provided through MatchCareer360 is for educational and informational purposes only. It is not intended to replace professional career counseling, academic advising, or job placement services.</p>
           </section>
           
           <section className="space-y-3">
@@ -82,7 +82,7 @@ export default function Disclaimer() {
           
           <section className="space-y-3 bg-[#1a1a40]/50 backdrop-blur-sm border border-[#9370db]/30 rounded-lg p-4">
             <h2 className="text-xl font-semibold text-amber-400">Summary</h2>
-            <p>CareerPathfinder&apos;s AI-powered recommendations are based solely on your assessment inputs. These suggestions are informational only and not promises or guarantees of any specific career outcome. You remain completely free to choose your own career path based on your personal circumstances, preferences, and opportunities. We strongly recommend consulting with professional career counselors for important career decisions.</p>
+            <p>MatchCareer360&apos;s AI-powered recommendations are based solely on your assessment inputs. These suggestions are informational only and not promises or guarantees of any specific career outcome. You remain completely free to choose your own career path based on your personal circumstances, preferences, and opportunities. We strongly recommend consulting with professional career counselors for important career decisions.</p>
           </section>
         </div>
         

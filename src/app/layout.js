@@ -3,9 +3,9 @@ import { SessionProviderWrapper } from './providers'
 import SidebarLayout from '@/components/SidebarLayout'
 
 export const metadata = {
-  title: 'CareerPathfinder - Discover Your Ideal Career Path with AI',
-  description: 'Find the perfect career match using our AI-powered career assessment tools. Take our personalized quiz and get tailored career recommendations based on your skills and interests.',
-  keywords: 'career finder, job recommendation, career quiz, AI career guidance, career assessment tool, professional development, job matching, skills assessment, career planning',
+  title: 'MatchCareer360 - Find Your Perfect Career Match with AI',
+  description: 'Discover your ideal career path with MatchCareer360. Our AI-powered career matching tools provide a comprehensive 360° view of potential career paths based on your skills and interests.',
+  keywords: 'career match, job matching, AI career guidance, 360 career assessment, career quiz, professional development, career planning, skills assessment, matchcareer360',
 }
 
 export default function RootLayout({ children }) {
