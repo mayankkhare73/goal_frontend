@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import connectDB from '@/lib/db';
 import AssessmentHistory from '@/models/AssessmentHistory';
-import { generateTextBasedRecommendations } from '@/services/gptService';
 
 // POST /api/assessment 
 export async function POST(request) {
